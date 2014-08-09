@@ -1,0 +1,24 @@
+---
+
+- name: Install OfflineImap Dependencies
+  apt: pkg={{ item }}
+       state=present
+  with_items: offlineimap_dependencies
+  sudo: True
+
+- name: Install OfflineImap
+  apt: name=offlineimap
+  sudo: True
+
+- name: Set OfflineImap pythonfile
+  copy: src=offlineimap.py
+        dest=~/.offlineimap.py
+        mode=0755
+  notify: restart offlineimap
+
+- name: Set OfflineImap rc config
+  template: src=offlineimaprc.j2
+        dest=~/.offlineimaprc
+        mode=0600
+  notify: restart offlineimap
+

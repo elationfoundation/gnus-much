@@ -1,0 +1,12 @@
+---
+
+dovecot_dependencies:
+    - dovecot-core
+    - libc6
+    - ucf
+
+dovecot_configs:
+    - 10-mail.conf
+
+dovecot_location: "/etc/dovecot"
+dovecot_config_location: "{{ dovecot_location }}/conf.d"

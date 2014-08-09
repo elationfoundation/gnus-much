@@ -1,0 +1,47 @@
+# Copyright: CC BY-NC-SA 4.0
+#   - Attribution-NonCommercial-ShareAlike 4.0 International
+#   - See: Gnus, Dovecot, OfflineIMAP, search: a HOWTO
+#   - URL: http://roland.entierement.nu/blog/2010/09/08/gnus-dovecot-offlineimap-search-a-howto.html
+
+# For customization help see: 
+#  - https://github.com/jgoerzen/offlineimap/blob/master/offlineimap.conf
+
+[general]
+accounts = MyAccount
+pythonfile = ~/.offlineimap.py
+
+[Account MyAccount]
+localrepository = LocalIMAP
+remoterepository = RemoteIMAP
+autorefresh = 5
+# postsynchook = notmuch new
+
+[Repository LocalIMAP]
+type = IMAP
+preauthtunnel = /usr/lib/dovecot/imap -o mail_location=maildir:$HOME/Mail
+holdconnectionopen = yes
+
+[Repository RemoteIMAP]
+type = IMAP
+ssl = yes
+remotehost = {{ offlineimap_remote_host }}
+remoteuser = {{ offlineimap_remote_user }}
+
+# Check gnome-keyring for password 
+# see: files/offlineimap.py
+remotepass = get_password("{{ offlineimap_remote_host }}")
+
+# Check if an port was set
+# int returns 0 if conversion does not work
+# http://jinja.pocoo.org/docs/templates/#int
+{% if int(offlineimap_remote_port) == 0 %}
+remoteport = {{ offlineimap_remote_port }}
+{% endif %}
+
+# 
+nametrans = lambda name: re.sub('^INBOX.', '', name)
+# folderfilter = lambda name: name in [ 'INBOX.important', 'INBOX.work' ]
+# folderfilter = lambda name: not (name in [ 'INBOX.spam', 'INBOX.commits'])
+# holdconnectionopen = yes
+maxconnections = 3
+# foldersort = lld_cmp

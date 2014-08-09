@@ -1,0 +1,36 @@
+---
+
+- name: Add the official dovecot APT key
+  apt_key: id=6E5548AD
+         data="{{ item }}"
+  with_file: dovecot.key
+  sudo: True
+
+- name: Install Dovecot Dependencies
+  apt: pkg={{ item }}
+       state=present
+  with_items: dovecot_dependencies
+  sudo: True
+
+- name: Install Dovecot
+  apt: name=dovecot-imapd
+  sudo: True
+
+- name: Set Dovecot default config
+  copy: src=etc_default_dovecot
+          dest=/etc/default/dovecot
+          owner=root
+          group=root
+          mode=0644
+  notify: restart dovecot
+  sudo: True
+
+- name: Set any other Dovecot daemon configurations
+  copy: src=confd.{{ item }}
+        dest={{ dovecot_config_location }}/{{ item }}
+        owner=root
+        group=root
+        mode=0644
+  with_items: dovecot_configs
+  notify: restart dovecot
+  sudo: True

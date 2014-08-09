@@ -1,0 +1,21 @@
+---
+
+emacs24_dependencies:
+    - autoconf 
+    - automake
+    - libtool
+    - texinfo
+    - build-essential
+    - git
+    - libncurses5-dev
+    - libgnutls-dev
+    - librsvg2-dev
+    - libxpm-dev
+    - libjpeg62-dev
+    - libtiff-dev
+    - libgif-dev
+    - libqt4-dev
+    - libgtk-3-dev
+
+emacs24_repository: "git://git.savannah.gnu.org/emacs.git"
+emacs24_build_dir: "~/Downloads/emacs24-source"

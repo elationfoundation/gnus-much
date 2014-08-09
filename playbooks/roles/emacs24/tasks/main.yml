@@ -1,0 +1,41 @@
+---
+
+- name: Check is emacs 24.3 is installed
+  command: which emacs-24.3
+  ignore_errors: yes
+  register: emacs-check-installed
+
+- name: Install emacs dependencies
+  apt: pkg={{ item }}
+       state=present
+  with_items: emacs24_dependencies
+  when: emacs-check-installed.stderr == 1
+  sudo: True
+
+- name: Get emacs 24.3 git repository
+  git: repo={{ emacs24_repository }}
+       depth=1
+       dest={{ emacs24_build_dir }}
+       version=emacs-24.3
+  when: emacs-check-installed.stderr == 1
+
+- name: Autogenerate
+  command: ./autogen.sh
+           chdir={{ emacs24_build_dir }}
+  when: emacs-check-installed.stderr == 1
+
+- name: Configure emacs 24.3
+  command: ./configure --prefix=/usr/local/emacs --with-x-toolkit=gtk3
+           chdir={{ emacs24_build_dir }}
+  when: emacs-check-installed.stderr == 1
+
+- name: Bootstrap emacs 24.3
+  command: make bootstrap
+           chdir={{ emacs24_build_dir }}
+  when: emacs-check-installed.stderr == 1
+
+- name: Install emacs 24.3
+  command: make install
+  sudo: True
+           chdir={{ emacs24_build_dir }}
+  when: emacs-check-installed.stderr == 1

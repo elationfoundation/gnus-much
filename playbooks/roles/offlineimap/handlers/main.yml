@@ -1,0 +1,5 @@
+---
+
+- name: restart offlineimap
+  service: name=offlineimap 
+           state=restarted

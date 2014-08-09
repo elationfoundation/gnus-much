@@ -1,0 +1,5 @@
+---
+
+offlineimap_dependencies:
+    - python
+    - python-support

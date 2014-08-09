@@ -1,0 +1,5 @@
+---
+
+- name: Set gnus config
+  copy: src=gnus.el
+        dest=~/.gnus

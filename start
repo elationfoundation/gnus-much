@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "Setting up gnus-much local imap support"
+
+ansible-playbook -i hosts playbooks/gnus-much.yml --ask-sudo-pass

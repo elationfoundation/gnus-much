@@ -1,0 +1,5 @@
+---
+
+notmuch_packages:
+    - notmuch
+    - notmuch-emacs
